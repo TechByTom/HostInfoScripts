@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+then
+	publicIP=$(dig +short myip.opendns.com @resolver1.opendns.com)
+else
+	publicIP=$1
+fi
+
+ISP=$(whois $publicIP|grep OrgName | cut -d " " -f9- | sed -n -e 'H;${x;s/\n/, /g;s/^,//;p;}')
+geoIP=$(geoiplookup $publicIP | grep "GeoIP City Edition" | cut -d"," -f4,5)
+
+HIGHLIGHT='\033[0;33m'
+NC='\033[0m' # No Color
+
+printf "This IP is: ${HIGHLIGHT}$publicIP${NC}\n"
+printf "Located in:${HIGHLIGHT}$geoIP${NC}\n"
+printf "The ISP is:${HIGHLIGHT}$ISP${NC}\n"
