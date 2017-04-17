@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#Check that we have geoiplookup available
+command -v geoiplookup >/dev/null 2>&1 || { echo >&2 "Please install geoiplookup first!. (apt-get install geoip-bin)."; exit 1; }
+
 if [ $# -eq 0 ]
 then
 	publicIP=$(dig +short myip.opendns.com @resolver1.opendns.com)
