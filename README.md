@@ -1,2 +1,2 @@
 # HostInfoScripts
-Random Scripts I Use
+Some quick scripts that might make your #bashlife easier.
