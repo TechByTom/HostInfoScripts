@@ -39,7 +39,6 @@ else
                                 if [ $(grep -oE "\b([0-9]{1,3}\.){3}[0-9]{1,3}\b"<<< "$line") ]; then
                                         IPLookup "$line"
                                 fi
-                                #IPLookup "$line"
                                 unset strHostname
                         done
                 fi
