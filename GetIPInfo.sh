@@ -7,22 +7,22 @@
 command -v geoiplookup >/dev/null 2>&1 || { echo >&2 "Please install geoiplookup first!. (apt-get install geoip-bin)."; exit 1; }
 
 function IPLookup(){
-	ISP="$(whois $1|grep OrgName | cut -d " " -f9- | sed -n -e 'H;${x;s/\n/, /g;s/^,//;p;}')"
-	geoIP="$(geoiplookup $publicIP | grep "GeoIP City Edition" | cut -d"," -f4,5)"
+	ISP="$(whois "$1"|grep OrgName | cut -d " " -f9- | sed -n -e 'H;${x;s/\n/, /g;s/^,//;p;}')"
+	geoIP="$(geoiplookup "$publicIP" | grep "GeoIP City Edition" | cut -d"," -f4,5)"
 
 	if [ "$strHostname" ]; then #if we have a known Hostname
-		echo -e "Hostname    : $(tput setaf 3)$strHostname$(tput sgr 0)"
+		echo -e "Hostname    : $(tput setaf 3)"$strHostname"$(tput sgr 0)"
 	fi
         if [ "$strRevHostname" ]; then #if we have a known Reverse Hostname
-                echo -e "RevHostname : $(tput setaf 3)$strRevHostname$(tput sgr 0)"
+                echo -e "RevHostname : $(tput setaf 3)"$strRevHostname"$(tput sgr 0)"
         fi
 #	if [ -n "$(curl --silent https://www.abuseipdb.com/check/$publicIP | grep "was found in our database")" ] #if this IP is in the Abuse IP DB
 #	then
 #		echo "$publicIP appears in Abuse IP DB"
 #	fi
-        echo -e "IP Looked up: $(tput setaf 3)$1$(tput sgr 0)"
-        echo -e "Located in  :$(tput setaf 3)$geoIP$(tput sgr 0)"
-        echo -e "The ISP is  :$(tput setaf 3)$ISP$(tput sgr 0)"
+        echo -e "IP Looked up: $(tput setaf 3)"$1"$(tput sgr 0)"
+        echo -e "Located in  :$(tput setaf 3)"$geoIP"$(tput sgr 0)"
+        echo -e "The ISP is  :$(tput setaf 3)"$ISP"$(tput sgr 0)"
 	if false; then #to add - accept a flag to check for abuseipdb listing of this IP
 		if [ -n "$(curl --silent https://www.abuseipdb.com/check/$1 | grep "was found in our database")" ]; then echo "$1" " appears in Abuse IP DB"; fi
 	fi
@@ -42,7 +42,7 @@ else
 		then
 			echo "\"$1\" doesn't look like an IP or hostname, please try again."
 		else #It's a hostname
-			dig +short $1|
+			dig +short "$1"|
 			while IFS= read -r line
 			do
 				strHostname="$1"
@@ -58,7 +58,7 @@ else
 		fi
 	else #Then it was an IP
 		publicIP="$1"
-		strRevHostname="$(dig +short -x $publicIP | tr '\n' ' ')"
+		strRevHostname="$(dig +short -x "$publicIP" | tr '\n' ' ')"
 		IPLookup "$publicIP"
 		unset strRevHostname
 	fi
